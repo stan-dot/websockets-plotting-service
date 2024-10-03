@@ -1,7 +1,8 @@
 import asyncio
+import json
 from contextlib import contextmanager
 from enum import Enum
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 import psycopg2  # PostgreSQL driver
 from pydantic import ValidationError
@@ -41,8 +42,8 @@ def get_db_connection():
 class RunStateManager:
     def __init__(self):
         self.current_run_state = RunState.IDLE
-        self.last_received_document: Union[None, DocumentType] = None
-        self.cache: List[Dict[str, Any]] = []  # Cache to store messages during the run
+        self.last_received_document: None | DocumentType = None
+        self.cache: list[dict[str, Any]] = []  # Cache to store messages during the run
 
     def validate_document_sequence(self, document_type: DocumentType):
         """
@@ -88,22 +89,43 @@ class RunStateManager:
         """Write the cached data to the PostgreSQL database."""
         with get_db_connection() as conn:
             cursor = conn.cursor()
-            for message in self.cache:
-                # Example SQL statement for inserting data (adjust for your schema)
+
+            # Assuming self.cache holds events after the Run Start
+            run_uid = self.cache[0][
+                "uid"
+            ]  # Get run UID from the first message if applicable
+
+            # Insert the Run Start document into the run_metadata table
+            start_document = self.cache[
+                0
+            ]  # Assuming the first message is the Run Start document
+            cursor.execute(
+                """
+                INSERT INTO run_metadata (run_uid, timestamp, start_document)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (run_uid) DO NOTHING  -- Prevent duplicate entries
+                """,
+                (
+                    run_uid,  # Run UID
+                    start_document["time"],  # Timestamp from the start document
+                    json.dumps(start_document),  # Store the full start document as JSON
+                ),
+            )
+
+            # Now insert each event into the event_data table
+            for message in self.cache[1:]:  # Skip the Run Start document
                 cursor.execute(
                     """
-                    INSERT INTO experiment_data (run_uid, data, document_type, timestamp)
-                    VALUES (%s, %s, %s, %s)
+                    INSERT INTO event_data (run_uid, event_data, timestamp)
+                    VALUES (%s, %s, %s)
                     """,
                     (
-                        message.get("uid"),  # Assuming each message has a UID
-                        str(
-                            message.get("data")
-                        ),  # Convert the data to a string (modify as needed)
-                        message.get("type"),  # Document type
-                        message.get("time"),  # Timestamp
+                        run_uid,  # Run UID (same as before)
+                        json.dumps(message),  # Store event data as JSON
+                        message["time"],  # Timestamp from the event
                     ),
                 )
+
             conn.commit()
             cursor.close()
 

@@ -1,0 +1,29 @@
+{{- if .Values.postgres.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}-postgres
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: bitnami/postgresql:latest
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.postgres.postgresqlUsername }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgres.postgresqlPassword }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgres.postgresqlDatabase }}
+          ports:
+            - name: postgres
+              containerPort: 5432
+{{- end }}

@@ -1,0 +1,27 @@
+# values.yaml
+
+# Application configuration
+app:
+  name: my-fastapi-app
+  image:
+    repository: my-docker-repo/my-fastapi-app
+    tag: latest
+  service:
+    type: ClusterIP
+    port: 80
+
+# PostgreSQL configuration
+postgres:
+  enabled: true
+  postgresqlUsername: user
+  postgresqlPassword: password
+  postgresqlDatabase: dbname
+  service:
+    port: 5432
+
+# Application-specific configuration
+config:
+  asyncpg_connect_string: "postgres://user:password@postgres:5432/dbname"
+  stomp:
+    host: "localhost"
+    port: 61613

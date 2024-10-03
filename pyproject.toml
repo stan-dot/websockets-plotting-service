@@ -12,7 +12,15 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 description = "plotting bluesky scans with websockets for frontend consumption"
-dependencies = [] # Add project dependencies here, e.g. ["click", "numpy"]
+dependencies = [
+
+    "matplotlib",
+    "event-model",
+    "numpy",
+    "fastapi",
+    "uvicorn",
+
+] # Add project dependencies here, e.g. ["click", "numpy"]
 dynamic = ["version"]
 license.file = "LICENSE"
 readme = "README.md"

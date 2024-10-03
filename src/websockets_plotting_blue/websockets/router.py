@@ -17,6 +17,7 @@ async def _send_message_at_hertz(socket: WebSocket, message: dict, hertz: float)
         await socket.send_json(message)
         await asyncio.sleep(interval)
 
+
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()

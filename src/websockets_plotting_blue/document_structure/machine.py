@@ -2,9 +2,11 @@ import asyncio
 import json
 from contextlib import contextmanager
 from enum import Enum
-from typing import Any, Dict
+from typing import Any, dict
 
 import psycopg2  # PostgreSQL driver
+from bluesky_stomp.messaging import MessageContext
+from bluesky_stomp.parser import parse_message
 from pydantic import ValidationError
 
 
@@ -70,7 +72,7 @@ class RunStateManager:
 
         self.last_received_document = document_type
 
-    def cache_message(self, message: Dict[str, Any]):
+    def cache_message(self, message: dict[str, Any]):
         """Cache the received message."""
         self.cache.append(message)
 

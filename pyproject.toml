@@ -15,6 +15,7 @@ description = "plotting bluesky scans with websockets for frontend consumption"
 dependencies = [
     "asyncpg",
     "bluesky-stomp",
+    "bytewax",
     "fastapi",
     "event-model",
     "matplotlib",

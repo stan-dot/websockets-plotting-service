@@ -1,5 +1,3 @@
-"""Interface for ``python -m websockets_plotting_blue``."""
-
 import asyncio
 
 from bluesky_stomp.messaging import MessageContext, MessagingTemplate

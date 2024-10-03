@@ -13,14 +13,17 @@ classifiers = [
 ]
 description = "plotting bluesky scans with websockets for frontend consumption"
 dependencies = [
-
-    "matplotlib",
-    "event-model",
-    "numpy",
+    "asyncpg",
+    "bluesky-stomp",
     "fastapi",
+    "event-model",
+    "matplotlib",
+    "msgpack",
+    "numpy",
+    "psycopg2",
     "uvicorn",
 
-] # Add project dependencies here, e.g. ["click", "numpy"]
+]
 dynamic = ["version"]
 license.file = "LICENSE"
 readme = "README.md"
@@ -55,7 +58,7 @@ version_file = "src/websockets_plotting_blue/_version.py"
 
 [tool.pyright]
 typeCheckingMode = "standard"
-reportMissingImports = false # Ignore missing stubs in imported modules
+reportMissingImports = false  # Ignore missing stubs in imported modules
 
 [tool.pytest.ini_options]
 # Run pytest with all our checkers, and don't spam us with massive tracebacks on error

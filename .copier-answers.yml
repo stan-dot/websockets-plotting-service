@@ -1,0 +1,15 @@
+# Changes here will be overwritten by Copier
+_commit: 2.3.0
+_src_path: gh:DiamondLightSource/python-copier-template
+author_email: stanislaw.malinowski@diamond.ac.uk
+author_name: Stanislaw Malinowski
+description: plotting bluesky scans with websockets for frontend consumption
+distribution_name: websockets-plotting-blue
+docker: true
+docs_type: README
+git_platform: github.com
+github_org: stan-dot
+package_name: websockets_plotting_blue
+pypi: true
+repo_name: websockets-plotting-blue
+type_checker: pyright
